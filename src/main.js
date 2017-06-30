@@ -45,11 +45,15 @@ export default class ObjectCache {
   constructor(seedObj, predicate) {
     if (seedObj instanceof Map) {
       this.cache = seedObj;
-    } else {
+    } else if (_.isObject(seedObj) && _.isFunction(predicate)) {
       this.cache = constructCache(seedObj, predicate);
+    } else {
+      this.cache = new Map();
     }
     this.getCacheForValue = this.getCacheForValue.bind(this);
     this.getCacheForPath = this.getCacheForPath.bind(this);
+    this.getPaths = this.getPaths.bind(this);
+    this.getValues = this.getValues.bind(this);
   }
 
   /**
