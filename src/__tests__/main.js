@@ -23,6 +23,15 @@ const testObj = {
 const objCache = new ObjectCache(testObj, o => _.isObject(o) && _.has(o, 'foo') && o);
 const initialPaths = [['a', 0], ['a', 1], ['a', 1, 'bar'], ['b', 'c']];
 
+test('Constructor does normal things with bad values', t => {
+  t.notThrows(() => {
+    let x = new ObjectCache();
+    x = new ObjectCache([]);
+    x = new ObjectCache(false);
+    t.true(x instanceof ObjectCache);
+  });
+});
+
 test('Constructs an ObjectCache with the right initial paths', t => {
   t.deepEqual(objCache.getPaths(), initialPaths);
 });
