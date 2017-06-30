@@ -1,0 +1,90 @@
+{
+  "name": "object-cache-graph-thing",
+  "version": "0.0.0",
+  "description": "A thing for making object traversals quicker",
+  "main": "dist/main.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test nyc ava",
+    "test:watch": "ava --watch",
+    "posttest": "npm run lint",
+    "lint": "xo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adierkens/object-cache-graph-thing.git"
+  },
+  "keywords": [
+    "tree",
+    "traversal",
+    "object",
+    "cache"
+  ],
+  "author": "Adam Dierkens <adam@dierkens.com>",
+  "license": "Beerware",
+  "bugs": {
+    "url": "https://github.com/adierkens/object-cache-graph-thing/issues"
+  },
+  "homepage": "https://github.com/adierkens/object-cache-graph-thing#readme",
+  "dependencies": {
+    "lodash": "~4.17.4"
+  },
+  "devDependencies": {
+    "ava": "~0.20.0",
+    "babel-plugin-istanbul": "~4.1.4",
+    "babel-plugin-transform-object-rest-spread": "~6.23.0",
+    "babel-plugin-transform-runtime": "~6.23.0",
+    "babel-preset-env": "~1.5.2",
+    "babel-preset-es2015": "~6.24.1",
+    "babel-require": "~1.0.1",
+    "cross-env": "~5.0.1",
+    "nyc": "~11.0.3",
+    "xo": "~0.18.2"
+  },
+  "xo": {
+    "space": true
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "source": [
+      "**/*.js",
+      "!__tests__/**/*"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "text",
+      "html",
+      "cobertura"
+    ],
+    "sourceMap": false,
+    "instrument": "false"
+  },
+  "babel": {
+    "plugins": [
+      [
+        "transform-object-rest-spread",
+        "transform-runtime",
+        {
+          "regenerator": false
+        }
+      ]
+    ],
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": 3
+          }
+        }
+      ]
+    ],
+    "env": {
+      "test": {
+        "plugins": [ "istanbul" ]
+      }
+    }
+  }
+}
