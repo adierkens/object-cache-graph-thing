@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Map from 'es6-map';
 
 export function isSubset(small, large) {
   if (!_.isArray(small) || !_.isArray(large)) {

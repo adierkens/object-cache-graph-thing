@@ -43,6 +43,7 @@ test('Constructs an ObjectCache with the right initial values', t => {
 test('Constructs an ObjectCache from a relative path', t => {
   const relativeToA = objCache.getCacheForPath(['a']);
   t.deepEqual(relativeToA.getPaths(), [[0], [1], [1, 'bar']]);
+  t.deepEqual(relativeToA.getValues(), [{foo: true}, {foo: true, bar: {foo: false}}, {foo: false}]);
 });
 
 test('Constructs an ObjectCache from an empty path', t => {
