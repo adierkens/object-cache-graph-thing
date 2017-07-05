@@ -1,4 +1,4 @@
-# object-cache-graph-thing [![npm version](https://badge.fury.io/js/object-cache-graph-thing.svg)](https://badge.fury.io/js/object-cache-graph-thing)
+# object-cache-graph-thing [![Build Status](https://travis-ci.org/adierkens/object-cache-graph-thing.svg?branch=master)](https://travis-ci.org/adierkens/object-cache-graph-thing) [![npm version](https://badge.fury.io/js/object-cache-graph-thing.svg)](https://badge.fury.io/js/object-cache-graph-thing)
 > A thing for making object traversals quicker
 
 Object traversals are slow, recursion is not fun, and waiting 10s for a page to load because you have to parse a JSON blob 17 times is terrible. This tries to fix some of that.
