@@ -35,13 +35,12 @@
   "homepage": "https://github.com/adierkens/object-cache-graph-thing#readme",
   "dependencies": {
     "es6-map": "~0.1.5",
-    "lodash": "~4.17.4"
+    "underscore": "~1.8.3"
   },
   "devDependencies": {
     "ava": "~0.20.0",
     "babel-cli": "~6.24.1",
     "babel-plugin-istanbul": "~4.1.4",
-    "babel-plugin-lodash": "~3.2.11",
     "babel-plugin-transform-object-rest-spread": "6.23.0",
     "babel-plugin-transform-runtime": "6.23.0",
     "babel-preset-env": "~1.5.2",
@@ -79,8 +78,7 @@
     "plugins": [
       [
         "transform-runtime",
-        "transform-object-rest-spread",
-        "lodash"
+        "transform-object-rest-spread"
       ]
     ],
     "presets": [
@@ -110,12 +108,22 @@
           "istanbul"
         ],
         "presets": [
-          ["env", { "modules": "commonjs" }]
+          [
+            "env",
+            {
+              "modules": "commonjs"
+            }
+          ]
         ]
       },
       "commonjs": {
         "presets": [
-          ["env", { "modules": "commonjs" }]
+          [
+            "env",
+            {
+              "modules": "commonjs"
+            }
+          ]
         ]
       }
     }

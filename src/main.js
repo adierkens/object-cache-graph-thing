@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'underscore';
 import Map from 'es6-map';
 
 export function isSubset(small, large) {
@@ -97,10 +97,10 @@ export default class ObjectCache {
   }
 
   getPaths() {
-    return _.toArray(this.cache.keys());
+    return Array.from(this.cache.keys());
   }
 
   getValues() {
-    return _.toArray(this.cache.values());
+    return Array.from(this.cache.values());
   }
 }
