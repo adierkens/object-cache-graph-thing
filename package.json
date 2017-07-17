@@ -3,10 +3,12 @@
   "version": "0.0.2",
   "description": "A thing for making object traversals quicker",
   "main": "dist/main.js",
+  "module": "dist/main.module.js",
   "scripts": {
     "clean": "rimraf dist",
     "build": "run-s clean build:*",
-    "build:module": "babel -d dist src --ignore /'__tests__'/",
+    "build:commonjs": "cross-env NODE_ENV=commonjs babel -d dist src --ignore /'__tests__'/",
+    "build:module": "babel ./src/main.js -o ./dist/main.module.js",
     "test": "cross-env NODE_ENV=test nyc ava",
     "test:watch": "ava --watch",
     "posttest": "npm run lint",
@@ -97,7 +99,8 @@
               "Android >= 4.0"
             ],
             "uglify": true
-          }
+          },
+          "modules": false
         }
       ]
     ],
@@ -105,6 +108,14 @@
       "test": {
         "plugins": [
           "istanbul"
+        ],
+        "presets": [
+          ["env", { "modules": "commonjs" }]
+        ]
+      },
+      "commonjs": {
+        "presets": [
+          ["env", { "modules": "commonjs" }]
         ]
       }
     }
