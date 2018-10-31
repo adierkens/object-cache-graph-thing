@@ -8,7 +8,7 @@ export type Cache<T> = {
 };
 
 export function isSubset(small: string, large: string) {
-  return large.startsWith(small);
+  return small === large.substr(0, small.length);
 }
 
 function constructCache<T>(
@@ -103,6 +103,6 @@ export default class ObjectCache<T> {
   }
 
   public getValues() {
-    return Object.values(this.cache);
+    return Object.keys(this.cache).map(p => this.cache[p]);
   }
 }
