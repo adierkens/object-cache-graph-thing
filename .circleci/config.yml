@@ -1,0 +1,111 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+
+general: 
+  artifacts:
+    coverage/
+
+
+defaults: &defaults
+  working_directory: ~/cache-thing
+  docker:
+    - image: circleci/node:latest-browsers
+
+jobs:
+  build:
+    <<: *defaults
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            # Find a cache corresponding to this specific package.json checksum
+            # when this file is changed, this key will fail
+            - cache-thing-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+            - cache-thing-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - cache-thing-{{ .Branch }}
+            # Find the most recent cache used from any branch
+            - cache-thing-master
+            - cache-thing-
+
+      - run: npm install
+        
+      - run: npm run build
+
+      - save_cache:
+          key: inject-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+          paths:
+            - ~/.cache/yarn
+            - node_modules
+      - persist_to_workspace:
+          root: .
+          paths:
+              - .
+
+  lint:
+    <<: *defaults
+    steps: 
+      - attach_workspace:
+          at: ~/cache-thing
+      - run:
+          name: 'Lint'
+          command: npm run lint
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/cache-thing
+      - run:
+          name: 'Test'
+          command: npm run test
+          environment:
+            JEST_JUNIT_OUTPUT: "coverage/junitjunit.xml"
+      - store_test_results:
+          path: coverage/junit
+      - store_artifacts:
+          path: coverage/junit
+      - run:
+          name: Send CodeCov Results
+          command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_KEY
+  
+  integration:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+            at: ~/cache-thing
+      - run:
+          name: 'Integration Test'
+          command: npm run test:example
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - lint:
+          requires: 
+            - build
+          filters:
+            tags:
+              only: /.*/
+      - test:
+          requires:
+              - build
+          filters:
+            tags:
+              only: /.*/
+      - integration:
+          requires:
+              - build
+          filters:
+            tags:
+              only: /.*/
