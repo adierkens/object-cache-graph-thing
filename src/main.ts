@@ -53,7 +53,7 @@ function constructCache<T>(
 }
 
 export default class ObjectCache<T> {
-  cache: Map<Path, T>;
+  public cache: Map<Path, T>;
 
   constructor(seedObj?: Map<Path, T> | object, predicate?: KeyGenerator<T>) {
     if (seedObj instanceof Map) {
@@ -72,10 +72,8 @@ export default class ObjectCache<T> {
 
   /**
    * Returns a subset of the cache graph filtered to only include the values equal to the query
-   * @param query
-   * @returns ObjectCache
    */
-  getCacheForValue(query: T) {
+  public getCacheForValue(query: T) {
     const map = new Map<Path, T>();
     this.cache.forEach((value, path) => {
       if (deepEqual(query, value)) {
@@ -88,10 +86,8 @@ export default class ObjectCache<T> {
 
   /**
    * Returns a subset of the cache graph localized for the given path
-   * @param currentPath
-   * @returns ObjectCache
    */
-  getCacheForPath(currentPath: Path): ObjectCache<T> {
+  public getCacheForPath(currentPath: Path): ObjectCache<T> {
     if (currentPath.length === 0) {
       return this;
     }
@@ -109,11 +105,11 @@ export default class ObjectCache<T> {
     return new ObjectCache<T>(map);
   }
 
-  getPaths() {
+  public getPaths() {
     return [...this.cache.keys()];
   }
 
-  getValues() {
+  public getValues() {
     return [...this.cache.values()];
   }
 }
