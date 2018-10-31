@@ -1,8 +1,11 @@
-import _ from 'underscore';
-import Map from 'es6-map';
+import deepEqual from 'fast-deep-equal';
 
-export function isSubset(small, large) {
-  if (!_.isArray(small) || !_.isArray(large)) {
+export type KeyGenerator<T> = (thing: any) => undefined | T;
+export type PathKey = string | number;
+export type Path = PathKey[];
+
+export function isSubset(small: Path, large: Path) {
+  if (!Array.isArray(small) || !Array.isArray(large)) {
     return false;
   }
 
@@ -19,38 +22,48 @@ export function isSubset(small, large) {
   return true;
 }
 
-function constructCache(seedObj, predicate) {
-  const cache = new Map();
+function constructCache<T>(
+  seedObj: object,
+  predicate: KeyGenerator<T>
+): Map<Path, T> {
+  const cache = new Map<Path, T>();
 
-  function recurse(obj, path = []) {
+  function recurse(obj: any, path: Path) {
     const k = predicate(obj);
 
     if (k) {
       cache.set(path, k);
     }
 
-    if (_.isObject(obj)) {
-      _.each(obj, (value, key) => {
+    if (Array.isArray(obj)) {
+      obj.forEach((value, index) => {
+        recurse(value, [...path, index]);
+      });
+    } else if (typeof obj === 'object') {
+      Object.keys(obj).forEach(key => {
+        const value = obj[key];
         recurse(value, [...path, key]);
       });
     }
   }
 
-  recurse(seedObj);
+  recurse(seedObj, []);
 
   return cache;
 }
 
-export default class ObjectCache {
+export default class ObjectCache<T> {
+  cache: Map<Path, T>;
 
-  constructor(seedObj, predicate) {
+  constructor(seedObj?: Map<Path, T> | object, predicate?: KeyGenerator<T>) {
     if (seedObj instanceof Map) {
       this.cache = seedObj;
-    } else if (_.isObject(seedObj) && _.isFunction(predicate)) {
+    } else if (typeof seedObj === 'object' && typeof predicate === 'function') {
       this.cache = constructCache(seedObj, predicate);
     } else {
-      this.cache = new Map();
+      this.cache = new Map<Path, T>();
     }
+
     this.getCacheForValue = this.getCacheForValue.bind(this);
     this.getCacheForPath = this.getCacheForPath.bind(this);
     this.getPaths = this.getPaths.bind(this);
@@ -62,15 +75,15 @@ export default class ObjectCache {
    * @param query
    * @returns ObjectCache
    */
-  getCacheForValue(query) {
-    const map = new Map();
+  getCacheForValue(query: T) {
+    const map = new Map<Path, T>();
     this.cache.forEach((value, path) => {
-      if (_.isEqual(query, value)) {
+      if (deepEqual(query, value)) {
         map.set(path, value);
       }
     });
 
-    return new ObjectCache(map);
+    return new ObjectCache<T>(map);
   }
 
   /**
@@ -78,14 +91,14 @@ export default class ObjectCache {
    * @param currentPath
    * @returns ObjectCache
    */
-  getCacheForPath(currentPath) {
+  getCacheForPath(currentPath: Path): ObjectCache<T> {
     if (currentPath.length === 0) {
       return this;
     }
 
-    const subset = _.partial(isSubset, currentPath);
-    const relativePath = _.partial(_.drop, _, currentPath.length);
-    const map = new Map();
+    const subset = (p: Path) => isSubset(currentPath, p);
+    const relativePath = (p: Path) => p.slice(currentPath.length);
+    const map = new Map<Path, T>();
 
     this.cache.forEach((value, path) => {
       if (subset(path)) {
@@ -93,14 +106,14 @@ export default class ObjectCache {
       }
     });
 
-    return new ObjectCache(map);
+    return new ObjectCache<T>(map);
   }
 
   getPaths() {
-    return Array.from(this.cache.keys());
+    return [...this.cache.keys()];
   }
 
   getValues() {
-    return Array.from(this.cache.values());
+    return [...this.cache.values()];
   }
 }

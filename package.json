@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/adierkens/object-cache-graph-thing#readme",
   "dependencies": {
+    "fast-deep-equal": "^2.0.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.5",
@@ -45,17 +46,17 @@
     "tsutils": "~3.1.0",
     "typescript": "^3.1.3"
   },
-    "lint-staged": {
-      "*.{js,json,css,md}": [
-        "prettier --write",
-        "git add"
-      ],
-      "*.{ts,tsx}": [
-        "prettier --parser typescript --write",
-        "npm run lint",
-        "git add"
-      ]
-    },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "prettier --parser typescript --write",
+      "npm run lint",
+      "git add"
+    ]
+  },
   "prettier": {
     "singleQuote": true
   }
