@@ -1,4 +1,4 @@
-import ObjectCache, { isSubset, Path } from '../main';
+import ObjectCache, {isSubset, Path} from '../main';
 
 test('isSubset', () => {
   expect(isSubset([1, 2, 3], [1, 2, 3])).toBeTruthy();
@@ -15,7 +15,7 @@ test('isSubset', () => {
 
 describe('objCache', () => {
   const testObj = {
-    a: [{ foo: true }, { foo: true, bar: { foo: false } }],
+    a: [{foo: true}, {foo: true, bar: {foo: false}}],
     b: {
       c: {
         foo: true
@@ -44,10 +44,10 @@ describe('objCache', () => {
 
   it('Constructs an ObjectCache with the right initial values', () => {
     expect(objCache.getValues()).toEqual([
-      { foo: true },
-      { foo: true, bar: { foo: false } },
-      { foo: false },
-      { foo: true }
+      {foo: true},
+      {foo: true, bar: {foo: false}},
+      {foo: false},
+      {foo: true}
     ]);
   });
 
@@ -55,9 +55,9 @@ describe('objCache', () => {
     const relativeToA = objCache.getCacheForPath(['a']);
     expect(relativeToA.getPaths()).toEqual([[0], [1], [1, 'bar']]);
     expect(relativeToA.getValues()).toEqual([
-      { foo: true },
-      { foo: true, bar: { foo: false } },
-      { foo: false }
+      {foo: true},
+      {foo: true, bar: {foo: false}},
+      {foo: false}
     ]);
   });
 
@@ -67,7 +67,7 @@ describe('objCache', () => {
   });
 
   it('Constructs an ObjectCache from a value', () => {
-    const fooCache = objCache.getCacheForValue({ foo: true });
+    const fooCache = objCache.getCacheForValue({foo: true});
     expect(fooCache.getPaths()).toEqual([['a', 0], ['b', 'c']]);
   });
 });
