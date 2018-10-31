@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/adierkens/object-cache-graph-thing#readme",
   "dependencies": {
+    "es6-map": "^0.1.5",
     "fast-deep-equal": "^2.0.1"
   },
   "devDependencies": {

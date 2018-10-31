@@ -1,4 +1,5 @@
 import deepEqual from 'fast-deep-equal';
+import Map from 'es6-map';
 
 export type KeyGenerator<T> = (thing: any) => undefined | T;
 export type PathKey = string | number;
