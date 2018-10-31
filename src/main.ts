@@ -106,10 +106,10 @@ export default class ObjectCache<T> {
   }
 
   public getPaths() {
-    return [...this.cache.keys()];
+    return Array.from(this.cache.keys());
   }
 
   public getValues() {
-    return [...this.cache.values()];
+    return Array.from(this.cache.values());
   }
 }
