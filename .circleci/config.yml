@@ -73,15 +73,6 @@ jobs:
       - run:
           name: Send CodeCov Results
           command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_KEY
-  
-  integration:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-            at: ~/cache-thing
-      - run:
-          name: 'Integration Test'
-          command: npm run test:example
 
 workflows:
   version: 2
@@ -98,12 +89,6 @@ workflows:
             tags:
               only: /.*/
       - test:
-          requires:
-              - build
-          filters:
-            tags:
-              only: /.*/
-      - integration:
           requires:
               - build
           filters:
