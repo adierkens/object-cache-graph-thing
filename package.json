@@ -1,6 +1,6 @@
 {
   "name": "object-cache-graph-thing",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A thing for making object traversals quicker",
   "main": "dist/main.js",
   "module": "dist/main.module.js",
