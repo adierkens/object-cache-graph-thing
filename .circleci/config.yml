@@ -4,10 +4,8 @@
 #
 version: 2
 
-general: 
-  artifacts:
-    coverage/
-
+general:
+  artifacts: coverage/
 
 defaults: &defaults
   working_directory: ~/cache-thing
@@ -34,22 +32,22 @@ jobs:
             - cache-thing-
 
       - run: npm install
-        
+
       - run: npm run build
 
       - save_cache:
-          key: inject-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+          key: cache-thing-{{ .Branch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
           paths:
             - ~/.cache/yarn
             - node_modules
       - persist_to_workspace:
           root: .
           paths:
-              - .
+            - .
 
   lint:
     <<: *defaults
-    steps: 
+    steps:
       - attach_workspace:
           at: ~/cache-thing
       - run:
@@ -65,7 +63,7 @@ jobs:
           name: 'Test'
           command: npm run test
           environment:
-            JEST_JUNIT_OUTPUT: "coverage/junitjunit.xml"
+            JEST_JUNIT_OUTPUT: 'coverage/junitjunit.xml'
       - store_test_results:
           path: coverage/junit
       - store_artifacts:
@@ -83,14 +81,14 @@ workflows:
             tags:
               only: /.*/
       - lint:
-          requires: 
+          requires:
             - build
           filters:
             tags:
               only: /.*/
       - test:
           requires:
-              - build
+            - build
           filters:
             tags:
               only: /.*/
